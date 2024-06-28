@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embed Specific Div</title>
+</head>
+<body>
+  <div id="embedded-container"></div>
+
+  <script>
+    async function embedSpecificDiv() {
+      try {
+        const response = await fetch('https://wisebarrel.github.io/test/');
+        const text = await response.text();
+        
+        // Create a temporary DOM element to parse the fetched HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text;
+
+        // Extract the specific div with class 'container'
+        const containerDiv = tempDiv.querySelector('div.container');
+
+        // Inject the content of the specific div into your own page
+        if (containerDiv) {
+          document.getElementById('embedded-container').innerHTML = containerDiv.innerHTML;
+        } else {
+          console.error('Div with class "container" not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching the HTML content:', error);
+      }
+    }
+
+    embedSpecificDiv();
+  </script>
+</body>
+</html>
