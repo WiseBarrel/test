@@ -64,16 +64,17 @@
 
   <script>
     async function fetchServerStatus() {
-      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const proxyUrl = 'https://api.allorigins.win/get?url=';
       const apiUrl = 'https://mcstatus.is-a.dev/api/status/mc.hypixel.net';
-      const response = await fetch(proxyUrl + apiUrl);
+      const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
       const data = await response.json();
+      const serverData = JSON.parse(data.contents);
 
       document.getElementById('server-icon').src = 'https://mcstatus.is-a.dev/api/png/mc.hypixel.net';
       document.getElementById('server-name').textContent = 'Hypixel Network';
-      document.getElementById('server-desc').innerHTML = data.description.replace(/§./g, '');
-      document.getElementById('server-players').textContent = `${data.players.online}/${data.players.max}`;
-      document.getElementById('server-latency').textContent = `${data.latency} ms`;
+      document.getElementById('server-desc').innerHTML = serverData.description.replace(/§./g, '');
+      document.getElementById('server-players').textContent = `${serverData.players.online}/${serverData.players.max}`;
+      document.getElementById('server-latency').textContent = `${serverData.latency} ms`;
     }
 
     fetchServerStatus();
