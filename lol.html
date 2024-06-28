@@ -4,13 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minecraft Server Status</title>
-  <meta property="og:title" content="Minecraft Server Status">
-  <meta property="og:description" content="Displays the status of a Minecraft server.">
-  <meta property="og:image" content="https://mcstatus.is-a.dev/api/png/mc.hypixel.net">
-  <meta property="og:url" content="https://your-domain.com/minecraft-server-status.html">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Minecraft Server Status">
-
   <style>
     body {
       font-family: 'Minecraft', sans-serif;
@@ -21,54 +14,9 @@
       height: 100vh;
       margin: 0;
     }
-    .container {
-      background-color: #2a2a2a;
-      border: 2px solid #000;
-      padding: 10px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      width: 500px;
-      height: 80px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    .server-icon {
-      width: 70px;
-      height: 70px;
-      border: 1px solid #000;
-      margin-right: 10px;
-    }
-    .server-details {
-      flex-grow: 1;
-    }
-    .server-name {
-      font-size: 16px;
-      color: #fff;
-    }
-    .server-desc {
-      font-size: 12px;
-      color: #aaa;
-    }
-    .server-status {
-      text-align: right;
-      color: #fff;
-      font-size: 14px;
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="" alt="Server Icon" class="server-icon" id="server-icon">
-    <div class="server-details">
-      <div class="server-name" id="server-name">Loading...</div>
-      <div class="server-desc" id="server-desc">Please wait...</div>
-    </div>
-    <div class="server-status">
-      <div id="server-players">0/0</div>
-      <div id="server-latency">0 ms</div>
-    </div>
-  </div>
-
   <script>
     async function fetchServerStatus() {
       const proxyUrl = 'https://api.allorigins.win/get?url=';
@@ -77,11 +25,38 @@
       const data = await response.json();
       const serverData = JSON.parse(data.contents);
 
-      document.getElementById('server-icon').src = 'https://mcstatus.is-a.dev/api/png/mc.hypixel.net';
-      document.getElementById('server-name').textContent = 'Hypixel Network';
-      document.getElementById('server-desc').innerHTML = serverData.description.replace(/§./g, '');
-      document.getElementById('server-players').textContent = `${serverData.players.online}/${serverData.players.max}`;
-      document.getElementById('server-latency').textContent = `${serverData.latency} ms`;
+      const embed = {
+        title: 'Minecraft Server Status',
+        color: 0x0099ff,
+        thumbnail: {
+          url: 'https://mcstatus.is-a.dev/api/png/mc.hypixel.net',
+        },
+        fields: [
+          {
+            name: 'Server Name',
+            value: 'Hypixel Network',
+            inline: true,
+          },
+          {
+            name: 'Description',
+            value: serverData.description.replace(/§./g, ''),
+            inline: true,
+          },
+          {
+            name: 'Players',
+            value: `${serverData.players.online}/${serverData.players.max}`,
+            inline: true,
+          },
+          {
+            name: 'Latency',
+            value: `${serverData.latency} ms`,
+            inline: true,
+          },
+        ],
+      };
+
+      // Post the embed to Discord using webhook or other integration
+      console.log(JSON.stringify(embed));
     }
 
     fetchServerStatus();
