@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Server Status</title>
+  <style>
+    body {
+      font-family: 'Minecraft', sans-serif;
+      background-color: #1e1e1e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #2a2a2a;
+      border: 2px solid #000;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      width: 500px;
+      height: 80px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .server-icon {
+      width: 70px;
+      height: 70px;
+      border: 1px solid #000;
+      margin-right: 10px;
+    }
+    .server-details {
+      flex-grow: 1;
+    }
+    .server-name {
+      font-size: 16px;
+      color: #fff;
+    }
+    .server-desc {
+      font-size: 12px;
+      color: #aaa;
+    }
+    .server-status {
+      text-align: right;
+      color: #fff;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="" alt="Server Icon" class="server-icon" id="server-icon">
+    <div class="server-details">
+      <div class="server-name" id="server-name">Loading...</div>
+      <div class="server-desc" id="server-desc">Please wait...</div>
+    </div>
+    <div class="server-status">
+      <div id="server-players">0/0</div>
+      <div id="server-latency">0 ms</div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchServerStatus() {
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const apiUrl = 'https://mcstatus.is-a.dev/api/status/mc.hypixel.net';
+      const response = await fetch(proxyUrl + apiUrl);
+      const data = await response.json();
+
+      document.getElementById('server-icon').src = 'https://mcstatus.is-a.dev/api/png/mc.hypixel.net';
+      document.getElementById('server-name').textContent = 'Hypixel Network';
+      document.getElementById('server-desc').innerHTML = data.description.replace(/§./g, '');
+      document.getElementById('server-players').textContent = `${data.players.online}/${data.players.max}`;
+      document.getElementById('server-latency').textContent = `${data.latency} ms`;
+    }
+
+    fetchServerStatus();
+  </script>
+</body>
+</html>
